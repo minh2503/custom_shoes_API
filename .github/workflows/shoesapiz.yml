@@ -18,16 +18,30 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-    - name: Clean previous builds
-      run: dotnet clean "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+
+    # Dọn dẹp file build cũ
+    - name: Remove temporary build files
+      run: |
+        Get-ChildItem -Path "${{ env.WORKING_DIRECTORY }}" -Recurse -Include bin,obj | Remove-Item -Recurse -Force
+      shell: pwsh
+
+    # Dừng tiến trình bị treo
+    - name: Kill lingering processes
+      run: |
+        taskkill /IM "dotnet.exe" /F || true
+
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
+
     - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --framework net6.0 --configuration ${{ env.CONFIGURATION }} --no-restore
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore --no-parallel
+
     - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --framework net6.0 --no-build
+      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+
     - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --framework net6.0 --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --no-parallel --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
