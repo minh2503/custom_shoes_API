@@ -1,14 +1,17 @@
 name: Build and deploy .NET Core application to Web App shoesapiz
+
 on:
   push:
     branches:
     - main
+
 env:
   AZURE_WEBAPP_NAME: shoesapiz
   AZURE_WEBAPP_PACKAGE_PATH: .\asp_source\publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: .\asp_source
+
 jobs:
   build:
     runs-on: windows-latest
@@ -19,13 +22,11 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
-    # Dọn dẹp file build cũ
     - name: Remove temporary build files
       run: |
         Get-ChildItem -Path "${{ env.WORKING_DIRECTORY }}" -Recurse -Include bin,obj | Remove-Item -Recurse -Force
       shell: pwsh
 
-    # Dừng tiến trình bị treo
     - name: Kill lingering processes
       run: |
         taskkill /IM "dotnet.exe" /F || true
@@ -34,19 +35,20 @@ jobs:
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
 
     - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore --no-parallel
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
 
     - name: Test
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
 
     - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --no-parallel --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
 
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        
   deploy:
     runs-on: windows-latest
     needs: build
