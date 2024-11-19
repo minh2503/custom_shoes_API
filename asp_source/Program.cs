@@ -34,8 +34,12 @@ namespace tapluyen.api
 
             // ==== Add framework services ======
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddEntityFrameworkSqlServer().AddDbContext<TFUDbContext>(options => options.UseSqlServer(connectionString));
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+            builder.Services.AddDbContext<TFUDbContext>(options =>
+                options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
 
             // ===== Add Identity =====
             builder.Services.AddAuthorization();
