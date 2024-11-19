@@ -157,13 +157,13 @@ namespace tapluyen.api
 
             // Forward Headers
             app.UseForwardedHeaders();
-
+            app.UseSwagger();
+            app.UseSwaggerUI();
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            //if (app.Environment.IsDevelopment())
+            //{
+              
+            //}
 
             // Configure CORS
             if (app.Environment.IsDevelopment())
