@@ -185,7 +185,7 @@ namespace tapluyen.api
                 "http://localhost:3000",
                 "https://cdn.tapta.net",
                     "http://localhost:5000",
-                    "https://shoes-customize-shop-ui-eight.vercel.app/"
+                    "https://shoes-customize-shop-ui-eight.vercel.app"
 
 
                 )
@@ -202,7 +202,7 @@ namespace tapluyen.api
                     "https://beta.ranus.vn",
                     "http://beta.ranus.vn",
                     "https://localhost:5000",
-                    "https://shoes-customize-shop-ui-eight.vercel.app/",
+                    "https://shoes-customize-shop-ui-eight.vercel.app",
                     "https://tapta.net",
                      "https://admin.tapta.net",
                      "http://localhost:3000",
