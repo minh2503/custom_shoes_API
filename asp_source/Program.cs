@@ -188,6 +188,7 @@ namespace tapluyen.api
                     "https://shoes-customize-shop-ui-eight.vercel.app"
 
 
+
                 )
                 .AllowAnyHeader().AllowAnyMethod().AllowCredentials());
             }
